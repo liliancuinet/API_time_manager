@@ -1,4 +1,5 @@
 defmodule Theme01.Agenda do
+  require Logger
   @moduledoc """
   The Agenda context.
   """
@@ -17,9 +18,23 @@ defmodule Theme01.Agenda do
       [%WorkingTime{}, ...]
 
   """
-  def list_workingtimes(user) do
-    {userID, ""} = Integer.parse(user)
-    Repo.all(WorkingTime, user_id: userID)
+  def list_workingtimes(params) do
+    {userID, ""} = Integer.parse(params["userID"])
+    if params["start"]==nil || params["end"]==nil do
+      query = from w in WorkingTime,
+          where: w.user_id == ^userID,
+          order_by: w.start,
+          select: w
+      Repo.all(query)
+    else
+      datetime_start = NaiveDateTime.from_iso8601!(params["start"])
+      datetime_end = NaiveDateTime.from_iso8601!(params["end"])
+      query = from w in WorkingTime,
+          where: w.start >= ^datetime_start and w.end <= ^datetime_end and w.user_id == ^userID,
+          order_by: w.start,
+          select: w
+      Repo.all(query)
+    end
   end
 
   @doc """

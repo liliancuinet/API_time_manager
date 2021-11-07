@@ -43,6 +43,9 @@ defmodule Theme01.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
+      {:cors_plug, "~> 2.0"},
+      {:joken, "~> 2.4"},
+      {:pow, "~> 1.0"},
       {:plug_cowboy, "~> 2.5"}
     ]
   end

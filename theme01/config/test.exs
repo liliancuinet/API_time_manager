@@ -16,7 +16,7 @@ config :theme01, Theme01.Repo,
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :theme01, Theme01Web.Endpoint,
-  http: [ip: {127, 0, 0, 1}, port: 4002],
+  http: [ip: {0, 0, 0, 0}, port: 4002],
   secret_key_base: "sqhGxk2BiUdx7Ll3q8WX1Xs9MdG71nitxh/Dsd20aIXRWCRY9R4T5XrF4Tx1H24Y",
   server: false
 

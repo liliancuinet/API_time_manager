@@ -20,7 +20,12 @@ defmodule Theme01.Horloge do
   """
   def list_clocks(user) do
     {userID, ""} = Integer.parse(user)
-    Repo.all(Clock, user_id: userID)
+    query = from c in Clock,
+          where: c.user_id == ^userID,
+          order_by: [desc: :time],
+          select: c
+
+    Repo.all(query)
   end
 
   @doc """
@@ -52,9 +57,9 @@ defmodule Theme01.Horloge do
 
   """
   def create_clock(user, clock_params) do
-    time = NaiveDateTime.utc_now()
     {userID, ""} = Integer.parse(user)
-    clock = %Clock{status: clock_params["status"], time: NaiveDateTime.truncate(time, :second), user_id: userID}
+    datetime = NaiveDateTime.from_iso8601!(clock_params["time"])
+    clock = %Clock{status: clock_params["status"], time: datetime, user_id: userID}
     Repo.insert(clock)
   end
 

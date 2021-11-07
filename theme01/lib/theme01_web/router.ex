@@ -1,8 +1,10 @@
 defmodule Theme01Web.Router do
   use Theme01Web, :router
+  use Pow.Phoenix.Router
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CORSPlug, [origin: "*"]
   end
 
   scope "/api", Theme01Web do
@@ -22,6 +24,9 @@ defmodule Theme01Web.Router do
     # Routes Clocks
     get "/clocks/:userID", ClockController, :index
     post "/clocks/:userID", ClockController, :create
+    resources "/clocks", ClockController, only: [:delete]
+
+    post "/login", AuthController, :login
   end
 
   # Enables LiveDashboard only for development

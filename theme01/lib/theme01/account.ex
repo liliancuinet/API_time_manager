@@ -5,6 +5,7 @@ defmodule Theme01.Account do
 
   import Ecto.Query, warn: false
   alias Theme01.Repo
+  require Logger
 
   alias Theme01.Account.User
 
@@ -18,20 +19,24 @@ defmodule Theme01.Account do
 
   """
   def list_users do
-    Repo.all(User)
+    query = from u in User,
+          order_by: u.id,
+          select: u
+
+    Repo.all(query)
   end
 
   def list_users_by(username, email) do
-    if username == "" && email == "" do
+    if username == nil && email == nil do
       Repo.all(User)
     end
-    if username != "" && email == "" do
+    if username != nil && email == nil do
       Repo.get_by(User, username: username)
     end
-    if username == "" && email != "" do
+    if username == nil && email != nil do
       Repo.get_by(User, email: email)
     end
-    if username != "" && email != "" do
+    if username != nil && email != nil do
       Repo.get_by(User, [username: username, email: email])
     end
   end
@@ -51,6 +56,14 @@ defmodule Theme01.Account do
 
   """
   def get_user!(id), do: Repo.get!(User, id)
+
+  def find_user(email, password) do
+    query = from u in User,
+    where: u.email == ^email and u.password == ^password,
+    select: u
+
+    Repo.all(query)
+  end
 
   @doc """
   Creates a user.
